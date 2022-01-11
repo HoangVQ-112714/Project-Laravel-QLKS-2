@@ -61,7 +61,7 @@ class HouseController extends Controller
             dd($_GET["start_date"]);
         }
         $house_id = [];
-        $orders = Order::where('status', '=', 'xác nhận')->get();
+        $orders = Order::where('status', '=', 'xác nhận1')->get();
         foreach ($orders as $order) {
             if (
                 ($start_date >= $order->start_date && $start_date <= $order->end_date) ||
