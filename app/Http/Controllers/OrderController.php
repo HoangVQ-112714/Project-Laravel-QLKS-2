@@ -35,7 +35,7 @@ class OrderController extends Controller
             $order->start_date = $request->start_date;
             $order->end_date = $request->end_date;
             $order->total_price = (int)($date * $house->price);
-            $order->status = 'chờ xác nhận';
+            $order->status = 'chờ xác nhận1';
         }
     }
 }
