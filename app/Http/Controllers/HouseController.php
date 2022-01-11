@@ -6,17 +6,18 @@ use App\Models\House;
 use App\Models\Image;
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class HouseController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $houses = House::with('user', 'category', 'images')->get();
         return response()->json($houses);
     }
 
-    public function detail($id)
+    public function detail($id): JsonResponse
     {
         $house = House::with('user', 'category', 'images')->find($id);
         return response()->json($house);
@@ -24,7 +25,7 @@ class HouseController extends Controller
 
 
     //tao mot can nha
-    public function create(Request $request, House $house)
+    public function create(Request $request, House $house): JsonResponse
     {
         $user = User::find($request->user_id);
         if ($user->role == 'manager') {
