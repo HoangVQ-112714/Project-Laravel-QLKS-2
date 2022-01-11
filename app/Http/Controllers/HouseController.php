@@ -28,7 +28,9 @@ class HouseController extends Controller
     public function create(Request $request, House $house): JsonResponse
     {
         $user = User::find($request->user_id);
-        if ($user->role == 'manager') {
+
+//        dd($user);
+        if ($user->role == 'Manager') {
             $house->user_id = $request->user_id;
             $house->name = $request->name;
             $house->category_id = $request->category_id;
@@ -44,7 +46,7 @@ class HouseController extends Controller
             $image = new Image();
             $image->name = $house->name . ' - ' . ($i + 1);
             $image->house_id = $house->id;
-            $image->url = $request->iamge[$i];
+            $image->url = $request->image[$i];
             $image->save();
         }
         return response()->json(['success' => 'Đăng nhà thành công']);
@@ -52,8 +54,12 @@ class HouseController extends Controller
 
     //tim kiem mot ngoi nha
 
+
     public function search($start_date, $end_date, $bedroom, $bathroom, $price_min, $price_max, $address)
     {
+        if(isset($_GET["start_date"])){
+            dd($_GET["start_date"]);
+        }
         $house_id = [];
         $orders = Order::where('status', '=', 'xác nhận')->get();
         foreach ($orders as $order) {

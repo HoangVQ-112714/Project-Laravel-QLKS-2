@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
@@ -23,8 +24,9 @@ Route::prefix('/house')->group(function (){
     Route::get('/',[HouseController::class,'index']);
     Route::get('/{id}',[HouseController::class,'detail']);
     Route::post('/create',[HouseController::class,'create']);
-    Route::post('/search',[HouseController::class,'search']);
+    Route::get('/search',[HouseController::class,'search']);
     Route::get('/search/{start_date}/{end_date}/{bedroom}/{bathroom}/{price_min}/{price_max}/{address}',[HouseController::class,'search']);
+
 });
 
 
@@ -38,9 +40,9 @@ Route::prefix('/order')->group(function (){
 });
 
 Route::middleware("api")->group(function (){
-    Route::post("/login", [\App\Http\Controllers\AuthController::class, "login"]);
-    Route::post("/register", [\App\Http\Controllers\AuthController::class, "register"]);
-    Route::post("/logout", [\App\Http\Controllers\AuthController::class, "logout"]);
+    Route::post("/login", [AuthController::class, "login"]);
+    Route::post("/register", [AuthController::class, "register"]);
+    Route::post("/logout", [AuthController::class, "logout"]);
 });
 
 
