@@ -22,8 +22,8 @@ class CreateHousesTable extends Migration
             $table->text('description')->nullable();
             $table->string('price')->nullable();
             $table->string('status')->nullable();
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
         });
     }

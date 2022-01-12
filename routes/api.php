@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,18 +23,32 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/houses')->group(function (){
     Route::get('/',[HouseController::class,'index']);
     Route::get('/{id}',[HouseController::class,'detail']);
+
     Route::post('/',[HouseController::class,'create']);
-    Route::post('/search',[HouseController::class,'search']);
+//    Route::get('/search',[HouseController::class, 'search']);
+    Route::get('/search',[HouseController::class,'search']);
+//    Route::get('/search/{start_date}/{end_date}/{bedroom}/{bathroom}/{price_min}/{price_max}/{address}',[HouseController::class,'search']);
+
+});
+
+
+Route::prefix('/order')->group(function (){
+    Route::get("/{id}", [OrderController::class, "getOrder"]);
+    Route::post('/house-rent/{id}',[OrderController::class,'houseRent']);
+    Route::post('/rent-confirm/{id}',[OrderController::class,'rentConfirm']);
+    Route::get('/rent-history',[OrderController::class,'rentHistory']);
+    Route::post('/cancel-rent/{id}',[OrderController::class,'cancelRent']);
+    Route::get('/rent-history-house/{id}',[OrderController::class,'rentHistoryHouse']);
 });
 Route::prefix("/users")->group(function () {
     Route::get("/house", [\App\Http\Controllers\UserController::class, "getAllHouse"]);
 });
 
 Route::middleware("api")->group(function (){
-    Route::post("/login", [\App\Http\Controllers\AuthController::class, "login"]);
-    Route::post("/register", [\App\Http\Controllers\AuthController::class, "register"]);
-    Route::post("/logout", [\App\Http\Controllers\AuthController::class, "logout"]);
-    Route::get("/userProfile", [\App\Http\Controllers\AuthController::class, "userProfile"]);
+    Route::post("/login", [AuthController::class, "login"]);
+    Route::post("/register", [AuthController::class, "register"]);
+    Route::post("/logout", [AuthController::class, "logout"]);
+    Route::get("/userProfile", [AuthController::class, "userProfile"]);
 });
 
 Route::prefix("/categories")->group(function () {
