@@ -23,23 +23,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/houses')->group(function (){
     Route::get('/',[HouseController::class,'index']);
     Route::get('/{id}',[HouseController::class,'detail']);
-
     Route::post('/',[HouseController::class,'create']);
-//    Route::get('/search',[HouseController::class, 'search']);
     Route::get('/search',[HouseController::class,'search']);
-//    Route::get('/search/{start_date}/{end_date}/{bedroom}/{bathroom}/{price_min}/{price_max}/{address}',[HouseController::class,'search']);
-
 });
 
-
-Route::prefix('/order')->group(function (){
+Route::prefix("/orders")->group(function () {
     Route::get("/{id}", [OrderController::class, "getOrder"]);
-    Route::post('/house-rent/{id}',[OrderController::class,'houseRent']);
-    Route::post('/rent-confirm/{id}',[OrderController::class,'rentConfirm']);
-    Route::get('/rent-history',[OrderController::class,'rentHistory']);
-    Route::post('/cancel-rent/{id}',[OrderController::class,'cancelRent']);
-    Route::get('/rent-history-house/{id}',[OrderController::class,'rentHistoryHouse']);
 });
+
+
+//Route::prefix('/order')->group(function (){
+//    Route::get("/{id}", [OrderController::class, "getOrder"]);
+//    Route::post('/house-rent/{id}',[OrderController::class,'houseRent']);
+//    Route::post('/rent-confirm/{id}',[OrderController::class,'rentConfirm']);
+//    Route::get('/rent-history',[OrderController::class,'rentHistory']);
+//    Route::post('/cancel-rent/{id}',[OrderController::class,'cancelRent']);
+//    Route::get('/rent-history-house/{id}',[OrderController::class,'rentHistoryHouse']);
+//});
 Route::prefix("/users")->group(function () {
     Route::get("/house", [\App\Http\Controllers\UserController::class, "getAllHouse"]);
 });

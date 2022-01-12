@@ -23,7 +23,7 @@ class HouseSeeder extends Seeder
         $house->price = 20000000;
         $house->status = "Có thể thuê";
         $house->category_id = 1;
-        $house->user_id = 1;
+        $house->user_id = 2;
         $house->save();
     }
 }
