@@ -27,7 +27,7 @@ class HouseController extends Controller
     public function create(Request $request, House $house)
     {
         $user = User::find($request->user_id);
-        if ($user->role == 'manager') {
+        if ($user->role == 'Manager') {
             $house->user_id = $request->user_id;
             $house->name = $request->name;
             $house->category_id = $request->category_id;
@@ -39,13 +39,13 @@ class HouseController extends Controller
             $house->status = $request->status;
             $house->save();
         }
-        for ($i = 0; $i < count($request->images); $i++) {
-            $image = new Image();
-            $image->name = $house->name . ' - ' . ($i + 1);
-            $image->house_id = $house->id;
-            $image->url = $request->iamge[$i];
-            $image->save();
-        }
+//        for ($i = 0; $i < count($request->images); $i++) {
+//            $image = new Image();
+//            $image->name = $house->name . ' - ' . ($i + 1);
+//            $image->house_id = $house->id;
+//            $image->url = $request->iamge[$i];
+//            $image->save();
+//        }
         return response()->json(['success' => 'Đăng nhà thành công']);
     }
 

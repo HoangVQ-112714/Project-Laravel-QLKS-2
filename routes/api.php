@@ -35,4 +35,8 @@ Route::middleware("api")->group(function (){
     Route::get("/userProfile", [\App\Http\Controllers\AuthController::class, "userProfile"]);
 });
 
+Route::prefix("/categories")->group(function () {
+    Route::get("/", [\App\Http\Controllers\CategoryController::class, "index"]);
+});
+
 

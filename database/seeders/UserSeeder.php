@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
         $user->address = "Cầu giấy, Hà Nội";
         $user->phone = "0352359396";
         $user->avatar = "";
-        $user->role = "User";
+        $user->role = "Manager";
         $user->save();
 
     }
