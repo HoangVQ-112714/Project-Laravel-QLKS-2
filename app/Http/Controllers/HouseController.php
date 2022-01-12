@@ -51,29 +51,37 @@ class HouseController extends Controller
 
     //tim kiem mot ngoi nha
 
-    public function search($start_date, $end_date, $bedroom, $bathroom, $price_min, $price_max, $address)
+//    public function search($start_date, $end_date, $bedroom, $bathroom, $price_min, $price_max, $address)
+//    {
+//        $house_id = [];
+//        $orders = Order::where('status', '=', 'xác nhận')->get();
+//        foreach ($orders as $order) {
+//            if (
+//                ($start_date >= $order->start_date && $start_date <= $order->end_date) ||
+//                ($end_date >= $order->start_date && $end_date <= $order->end_date) ||
+//                ($order->start_date <= $end_date && $order->start_date >= $start_date) ||
+//                ($order->end_date <= $end_date && $order->end_date >= $start_date)
+//            ) {
+//                $house_id[] = $order->house_id;
+//            }
+//        }
+//        $houses = House::with('category', 'user', 'images')
+//            ->whereNotIn('id', array_unique($house_id))
+//            ->where('price', '>=', $price_min)
+//            ->where('price', '<=', $price_max)
+//            ->orwhere('bedroom', '=', $bedroom)
+//            ->orwhere('bathroom', '=', $bathroom)
+//            ->where('address', 'LIKE', '%' . $address . '%')->get();
+//        return response()->json($houses);
+//    }
+
+    public function search(Request $request)
     {
-        $house_id = [];
-        $orders = Order::where('status', '=', 'xác nhận')->get();
-        foreach ($orders as $order) {
-            if (
-                ($start_date >= $order->start_date && $start_date <= $order->end_date) ||
-                ($end_date >= $order->start_date && $end_date <= $order->end_date) ||
-                ($order->start_date <= $end_date && $order->start_date >= $start_date) ||
-                ($order->end_date <= $end_date && $order->end_date >= $start_date)
-            ) {
-                $house_id[] = $order->house_id;
-            }
-        }
-        $houses = House::with('category', 'user', 'images')
-            ->whereNotIn('id', array_unique($house_id))
-            ->where('price', '>=', $price_min)
-            ->where('price', '<=', $price_max)
-            ->orwhere('bedroom', '=', $bedroom)
-            ->orwhere('bathroom', '=', $bathroom)
-            ->where('address', 'LIKE', '%' . $address . '%')->get();
+        $name = $request->input("search");
+        $houses = House::with("category", "images", "user")
+            ->where("name", "LIKE", "%" . $name . "%")
+            ->get();
         return response()->json($houses);
     }
-
 
 }

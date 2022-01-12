@@ -22,7 +22,7 @@ Route::prefix('/houses')->group(function (){
     Route::get('/',[HouseController::class,'index']);
     Route::get('/{id}',[HouseController::class,'detail']);
     Route::post('/',[HouseController::class,'create']);
-    Route::post('/search',[HouseController::class,'search']);
+    Route::get('/search',[HouseController::class, 'search']);
 });
 Route::prefix("/users")->group(function () {
     Route::get("/house", [\App\Http\Controllers\UserController::class, "getAllHouse"]);
