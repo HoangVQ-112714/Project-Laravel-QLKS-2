@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('house_id');
             $table->date('start_date');
             $table->date('end_date');
-            $table->integer('total_price');
+            $table->integer('price');
             $table->string('status');
             $table->timestamps();
         });
