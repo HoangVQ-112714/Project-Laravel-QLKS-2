@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::prefix('/house')->group(function (){
+Route::prefix('/houses')->group(function (){
     Route::get('/',[HouseController::class,'index']);
     Route::get('/{id}',[HouseController::class,'detail']);
     Route::post('/create',[HouseController::class,'create']);
@@ -36,13 +36,16 @@ Route::prefix('/order')->group(function (){
     Route::get('/rent-history',[OrderController::class,'rentHistory']);
     Route::post('/cancel-rent/{id}',[OrderController::class,'cancelRent']);
     Route::get('/rent-history-house/{id}',[OrderController::class,'rentHistoryHouse']);
-
+});
+Route::prefix("/users")->group(function () {
+    Route::get("/house", [\App\Http\Controllers\UserController::class, "getAllHouse"]);
 });
 
 Route::middleware("api")->group(function (){
     Route::post("/login", [AuthController::class, "login"]);
     Route::post("/register", [AuthController::class, "register"]);
     Route::post("/logout", [AuthController::class, "logout"]);
+    Route::get("/userProfile", [AuthController::class, "userProfile"]);
 });
 
 

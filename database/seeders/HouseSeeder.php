@@ -15,15 +15,15 @@ class HouseSeeder extends Seeder
     public function run()
     {
         $house = new House();
-            $house->name = 'nha A';
-            $house->address = 'ha noi';
-            $house->bedroom = '3';
-            $house->bathroom = '3';
-            $house->description = 'rat to';
-            $house->price='2000';
-            $house->status = '1';
-            $house->category_id = '1';
-            $house->user_id = '1';
-            $house->save();
+        $house->name = "Vinhome Royal City";
+        $house->address = "Thanh Xuân, Nguyễn Trãi";
+        $house->bedroom = 2;
+        $house->bathroom = 2;
+        $house->description = "120m2 rộng rãi, thoáng mát, view đẹp";
+        $house->price = 20000000;
+        $house->status = "Có thể thuê";
+        $house->category_id = 1;
+        $house->user_id = 1;
+        $house->save();
     }
 }
