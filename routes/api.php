@@ -23,9 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/houses')->group(function (){
     Route::get('/',[HouseController::class,'index']);
     Route::get('/{id}',[HouseController::class,'detail']);
-    Route::post('/create',[HouseController::class,'create']);
+
+    Route::post('/',[HouseController::class,'create']);
+//    Route::get('/search',[HouseController::class, 'search']);
     Route::get('/search',[HouseController::class,'search']);
-    Route::get('/search/{start_date}/{end_date}/{bedroom}/{bathroom}/{price_min}/{price_max}/{address}',[HouseController::class,'search']);
+//    Route::get('/search/{start_date}/{end_date}/{bedroom}/{bathroom}/{price_min}/{price_max}/{address}',[HouseController::class,'search']);
 
 });
 

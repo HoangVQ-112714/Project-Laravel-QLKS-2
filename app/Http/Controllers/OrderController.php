@@ -17,7 +17,7 @@ class OrderController extends Controller
         $house = House::with('user')->find($id);
         $email = $house->user->email;
         $content = 'order';
-        $orders = Order::where('status', '=', 'xác nhận')->where('house_id', '=', $id)->get();
+        $orders = Order::where('status', '=', 'Xác nhận')->where('house_id', '=', $id)->get();
         $house_id = [];
         foreach ($orders as $ord) {
             if (
