@@ -10,43 +10,61 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function houseRent($id, Request $request, Order $order): \Illuminate\Http\JsonResponse
+    public function getOrder($id, Request $request)
     {
-        $date = $this->dateDifference($request->start_date, $request->end_date);
-        $user = auth()->user();
-        $house = House::with('user')->find($id);
-        $email = $house->user->email;
-        $content = 'order';
-        $orders = Order::where('status', '=', 'Xác nhận')->where('house_id', '=', $id)->get();
-        $house_id = [];
-        foreach ($orders as $ord) {
-            if (
-                ($request->start_date >= $ord->start_date && $request->start_date <= $ord->end_date) ||
-                ($request->end_date >= $ord->start_date && $request->end_date <= $ord->end_date) ||
-                ($ord->start_date <= $request->end_date && $ord->start_date >= $request->start_date) ||
-                ($ord->end_date <= $request->end_date && $ord->end_date >= $request->start_date)
-            ) {
-                if ($user->id != $house->user_id) {
-                    $house_id[] = $ord->house_id;
-                }
-            }
-        }
-        if (!array_unique($house_id) && $house->status == 'còn trống') {
-            $order->user_id = $user->id;
-            $order->house_id = $id;
-            $order->start_date = $request->start_date;
-            $order->end_date = $request->end_date;
-            $order->total_price = (int)($date * $house->price);
-            $order->status = 'chờ xác nhận';
-            $order->save();
-            (new MailController)->sendMail($email, $content);
-            return response()->json(['success' => 'Ok', $user]);
-        } elseif ($house->status == 'đang nâng cấp') {
-            return response()->json(['message' => 'Nhà đang được nâng cấp'], 403);
-        } else {
-            return response()->json(['message' => 'nhà đang cho thuê'], 403);
-        }
+        $houseId = House::with("user", "category", "images")->find($id);
+        $userId = auth()->user()->id;
+        $order = new Order();
+        $order->start_date = $request->start_date;
+        $order->end_date = $request->end_date;
+        $order->house_id = $id;
+        $order->user_id = $userId;
+        $order->price = $houseId->price;
+        $order->status = "Đang chờ duyệt";
+        $order->save();
+        $house = House::with("user")->where("id", "=", $id)->get();
+        return response()->json([
+           "order" => $order,
+           "house" => $house
+        ]);
     }
+//    public function houseRent($id, Request $request, Order $order): \Illuminate\Http\JsonResponse
+//    {
+//        $date = $this->dateDifference($request->start_date, $request->end_date);
+//        $user = auth()->user();
+//        $house = House::with('user')->find($id);
+//        $email = $house->user->email;
+//        $content = 'order';
+//        $orders = Order::where('status', '=', 'Xác nhận')->where('house_id', '=', $id)->get();
+//        $house_id = [];
+//        foreach ($orders as $ord) {
+//            if (
+//                ($request->start_date >= $ord->start_date && $request->start_date <= $ord->end_date) ||
+//                ($request->end_date >= $ord->start_date && $request->end_date <= $ord->end_date) ||
+//                ($ord->start_date <= $request->end_date && $ord->start_date >= $request->start_date) ||
+//                ($ord->end_date <= $request->end_date && $ord->end_date >= $request->start_date)
+//            ) {
+//                if ($user->id != $house->user_id) {
+//                    $house_id[] = $ord->house_id;
+//                }
+//            }
+//        }
+//        if (!array_unique($house_id) && $house->status == 'còn trống') {
+//            $order->user_id = $user->id;
+//            $order->house_id = $id;
+//            $order->start_date = $request->start_date;
+//            $order->end_date = $request->end_date;
+//            $order->total_price = (int)($date * $house->price);
+//            $order->status = 'chờ xác nhận';
+//            $order->save();
+//            (new MailController)->sendMail($email, $content);
+//            return response()->json(['success' => 'Ok', $user]);
+//        } elseif ($house->status == 'đang nâng cấp') {
+//            return response()->json(['message' => 'Nhà đang được nâng cấp'], 403);
+//        } else {
+//            return response()->json(['message' => 'nhà đang cho thuê'], 403);
+//        }
+//    }
 
     //chu nha xac nhan thue nha
 
