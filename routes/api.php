@@ -25,10 +25,13 @@ Route::prefix('/houses')->group(function (){
     Route::get('/{id}',[HouseController::class,'detail']);
     Route::post('/',[HouseController::class,'create']);
     Route::get('/search',[HouseController::class,'search']);
+    Route::delete("/{id}", [HouseController::class, "delete"]);
+    Route::put("/{id}", [HouseController::class, "edit"]);
 });
 
 Route::prefix("/orders")->group(function () {
-    Route::get("/{id}", [OrderController::class, "getOrder"]);
+    Route::post("/{id}", [OrderController::class, "getOrder"]);
+    Route::get("/", [OrderController::class, "orderUser"]);
 });
 
 

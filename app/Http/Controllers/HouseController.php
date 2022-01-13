@@ -37,7 +37,7 @@ class HouseController extends Controller
             $house->bathroom = $request->bathroom;
             $house->description = $request->description;
             $house->price = $request->price;
-            $house->status = $request->status;
+            $house->status = "Có thể cho thuê";
             $house->save();
         }
 //        for ($i = 0; $i < count($request->images); $i++) {
@@ -56,13 +56,31 @@ class HouseController extends Controller
     public function search(Request $request)
     {
         $name = $request->input("search");
-        $address = $request->input("search");
+//        $address = $request->search;
         $houses = House::with("category", "images", "user")
-            ->where("name", "LIKE", "%{$name}%")
-            ->where("address", "like", "%{$address}%")
+            ->where("name", "like", "%". $name . "%")
+//            ->where("address", "like", "%{$address}%")
             ->get();
         return response()->json($houses);
     }
+
+    public function delete($id)
+    {
+        $house = House::with( "user", "category")->find($id);
+        $house->delete();
+        return response()->json([
+            "message" => "ok"
+        ]);
+    }
+
+    public function edit(Request $request ,$id)
+    {
+        House::query()->findOrFail($id);
+        $data = $request->only('name','address','bedroom', "bathroom",'description','price','status','category_id','user_id');
+        $house = House::query()->where("id", '=',$id)->update($data);
+        return response()->json($house);
+    }
+
 
 
 //    public function search($start_date, $end_date, $bedroom, $bathroom, $price_min, $price_max, $address)
