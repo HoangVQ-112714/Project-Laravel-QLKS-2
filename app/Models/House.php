@@ -18,7 +18,8 @@ class House extends Model
         'price',
         'status',
         'category_id',
-        'user_id'
+        'user_id',
+        'image'
     ];
 
     public function category()
