@@ -35,5 +35,25 @@ class UserSeeder extends Seeder
         $user->role = "User";
         $user->save();
 
+        $user = new User();
+        $user->name = "Chí Thành";
+        $user->email = "chithanhvtpt1@gmail.com";
+        $user->password = bcrypt("123456");
+        $user->address = "Cầu giấy, Hà Nội";
+        $user->phone = "0352359396";
+        $user->avatar = "";
+        $user->role = "Manager";
+        $user->save();
+
+        $user = new User();
+        $user->name = "Chí Thành";
+        $user->email = "chithanhvtpt2@gmail.com";
+        $user->password = bcrypt("123456");
+        $user->address = "Cầu giấy, Hà Nội";
+        $user->phone = "0352359396";
+        $user->avatar = "";
+        $user->role = "User";
+        $user->save();
+
     }
 }
