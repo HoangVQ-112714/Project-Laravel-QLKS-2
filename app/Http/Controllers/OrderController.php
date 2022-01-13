@@ -6,27 +6,44 @@ use App\Models\House;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     public function getOrder($id, Request $request)
     {
-        $houseId = House::with("user", "category", "images")->find($id);
-        $userId = auth()->user()->id;
-        $order = new Order();
-        $order->start_date = $request->start_date;
-        $order->end_date = $request->end_date;
-        $order->house_id = $id;
-        $order->user_id = $userId;
-        $order->price = $houseId->price;
-        $order->status = "Đang chờ duyệt";
-        $order->save();
-        $house = House::with("user")->where("id", "=", $id)->get();
-        return response()->json([
-           "order" => $order,
-           "house" => $house
-        ]);
+        $house = House::with("user", "category", "images")->find($id);
+        $email = $house->user->email;
+        $content = 'order';
+
+        if ($house->status == "Có thể cho thuê") {
+            $userId = auth()->user()->id;
+            $order = new Order();
+            $order->start_date = $request->start_date;
+            $order->end_date = $request->end_date;
+            $order->house_id = $id;
+            $order->user_id = $userId;
+            $order->price = $house->price;
+            $order->status = "Đang chờ duyệt";
+            $order->save();
+            (new MailController)->sendMail($email, $content);
+            return response()->json([
+                "message" => "Get order success",
+                "order" => $order
+            ]);
+        }else {
+            return response()->json([
+                "message" => "Đã có người thuê"
+            ]);
+        }
+    }
+
+    public function orderUser()
+    {
+        $id = Auth::user()->id;
+        $order = Order::with("user", "house")->where("user_id", "=", $id)->orderBy("created_at", "DESC")->get();
+        return response()->json($order);
     }
 //    public function houseRent($id, Request $request, Order $order): \Illuminate\Http\JsonResponse
 //    {
@@ -152,18 +169,18 @@ class OrderController extends Controller
                     $house->save();
                 }
             }
-            if ($order->status == 'xác nhận' && $date > $order->end_date){
+            if ($order->status == 'xác nhận' && $date > $order->end_date) {
                 $order->status = 'đã thanh toán';
                 $order->save();
                 $house = House::find($order->house->id);
                 $house->status = 'còn trống';
                 $house->save();
             }
-            if ($order->status == 'xác nhận' && $date > $order->end_date){
+            if ($order->status == 'xác nhận' && $date > $order->end_date) {
                 $order->status = 'đã thanh toán ';
                 $order->save();
                 $house = House::find($order->house->id);
-                $house->status= 'còn trống';
+                $house->status = 'còn trống';
                 $house->save();
             }
             if ($order->status == 'chờ xác nhận' && $date >= $order->start_date) {
@@ -172,9 +189,9 @@ class OrderController extends Controller
             }
             $rentMost = Order::select('house_id', DB::raw('count(id) as count'))
                 ->with('house', 'image')
-                ->where('status', '=' ,'đã thanh toán')
+                ->where('status', '=', 'đã thanh toán')
                 ->groupBy('house_id')
-                ->orderBy('count','DESC')
+                ->orderBy('count', 'DESC')
                 ->limit(5)->get();
             return response()->json($rentMost);
         }
@@ -190,8 +207,6 @@ class OrderController extends Controller
             return response()->json($orders);
         }
     }
-
-
 
 
 }

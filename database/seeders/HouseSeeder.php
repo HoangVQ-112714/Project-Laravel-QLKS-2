@@ -21,7 +21,7 @@ class HouseSeeder extends Seeder
         $house->bathroom = 2;
         $house->description = "120m2 rộng rãi, thoáng mát, view đẹp";
         $house->price = 20000000;
-        $house->status = "Có thể thuê";
+        $house->status = "Có thể cho thuê";
         $house->category_id = 1;
         $house->image="https://cdn.luxstay.com/users/22959/pu1oVWjsZpJSKR5yAdO1pn3Q.jpeg";
         $house->user_id = 1;
